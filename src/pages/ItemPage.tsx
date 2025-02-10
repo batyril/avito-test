@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom';
-import { Button, Box, Heading, Text } from '@chakra-ui/react'; // Импортируем компоненты Chakra UI
-import { Link } from 'react-router-dom'; // Импортируем Link для навигации
+import { Button, Box, Heading, Text } from '@chakra-ui/react';
+import { Link } from 'react-router-dom';
 import Layout from '../components/Layout';
 
 const ItemPage = () => {

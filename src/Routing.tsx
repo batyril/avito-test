@@ -1,9 +1,7 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import FormPage from './pages/FormPage.tsx';
-import ListPage from './pages/ListPage';
-import ItemPage from './pages/ItemPage';
 import ROUTES from './const/routes.ts';
-import TitleUpdater from './TitleUpdater/TitleUpdater.tsx';
+import TitleUpdater from './components/TitleUpdater';
+import { FormPage, ItemPage, ListPage } from './pages';
 
 const AppRouter = () => {
   return (

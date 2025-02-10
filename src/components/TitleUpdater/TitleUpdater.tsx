@@ -1,6 +1,6 @@
 import { useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
-import ROUTES from '../const/routes.ts';
+import ROUTES from '../../const/routes.ts';
 
 const TitleUpdater = () => {
   const location = useLocation();

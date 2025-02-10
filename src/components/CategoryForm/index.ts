@@ -1,1 +1,1 @@
-export * from './CategoryForm.tsx';
+export { default } from './CategoryForm.tsx';

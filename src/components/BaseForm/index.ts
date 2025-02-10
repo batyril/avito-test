@@ -1,1 +1,1 @@
-export * from './BaseForm.tsx';
+export { default } from './BaseForm.tsx';

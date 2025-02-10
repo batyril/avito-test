@@ -1,9 +1,11 @@
 import Layout from '../components/Layout';
-import BaseForm from '../components/BaseForm/BaseForm.tsx';
+import BaseForm from '../components/BaseForm';
 import { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import CategoryForm from '../components/CategoryForm/CategoryForm.tsx';
+import CategoryForm from '../components/CategoryForm';
+
 import { Heading } from '@chakra-ui/react';
+
 import { FORM_STEPS } from '../const/formSteps.ts';
 
 const FormPage = () => {

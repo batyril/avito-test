@@ -1,5 +1,5 @@
-import { Button, Box, VStack, Heading, Text } from '@chakra-ui/react'; // Импортируем компоненты Chakra UI
-import { Link } from 'react-router-dom'; // Импортируем Link для навигации
+import { Button, Box, VStack, Heading, Text } from '@chakra-ui/react';
+import { Link } from 'react-router-dom';
 import Layout from '../components/Layout';
 
 const items = [
