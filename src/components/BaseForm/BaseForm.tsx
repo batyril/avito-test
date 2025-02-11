@@ -22,10 +22,10 @@ const BaseForm = ({ onNext }: BaseFormProps) => {
 
   return (
     <VStack as='form' onSubmit={handleSubmit(onNext)} spacing={4}>
-      <FormControl isInvalid={!!errors.title}>
+      <FormControl isInvalid={!!errors.name}>
         <FormLabel htmlFor='location'>Название объявления</FormLabel>
-        <Input {...register('title', { required: 'Название обязательно' })} />
-        <FormErrorMessage>{errors.title?.message?.toString()}</FormErrorMessage>
+        <Input {...register('name', { required: 'Название обязательно' })} />
+        <FormErrorMessage>{errors.name?.message?.toString()}</FormErrorMessage>
       </FormControl>
       <FormControl isInvalid={!!errors.description}>
         <FormLabel htmlFor='location'>Описание объявления</FormLabel>
@@ -43,17 +43,28 @@ const BaseForm = ({ onNext }: BaseFormProps) => {
           {errors.location?.message?.toString()}
         </FormErrorMessage>
       </FormControl>
-      <FormControl isInvalid={!!errors.category}>
+      <FormControl isInvalid={!!errors.type}>
         <FormLabel htmlFor='location'> Выберите категорию</FormLabel>
-        <Select {...register('category', { required: 'Выберите категорию' })}>
+        <Select {...register('type', { required: 'Выберите категорию' })}>
           <option value='Недвижимость'>Недвижимость</option>
           <option value='Авто'>Авто</option>
           <option value='Услуги'>Услуги</option>
         </Select>
-        <FormErrorMessage>
-          {errors.category?.message?.toString()}
-        </FormErrorMessage>
+        <FormErrorMessage>{errors.type?.message?.toString()}</FormErrorMessage>
       </FormControl>
+      <FormControl isInvalid={!!errors.image}>
+        <FormLabel htmlFor='image'>Ссылка на картинку/фото</FormLabel>
+        <Input
+          {...register('image', {
+            pattern: {
+              value: /^(https?:\/\/.*\.(?:png|jpg|jpeg|gif|webp|svg))$/i,
+              message: 'Введите корректную ссылку на изображение',
+            },
+          })}
+        />
+        <FormErrorMessage>{errors.image?.message?.toString()}</FormErrorMessage>
+      </FormControl>
+
       <Button type='submit'>Далее</Button>
     </VStack>
   );

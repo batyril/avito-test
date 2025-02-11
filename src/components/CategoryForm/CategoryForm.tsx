@@ -21,13 +21,11 @@ const CategoryForm = ({ onSubmit }: CategoryFormProps) => {
     watch,
     formState: { errors },
   } = useFormContext();
-  const category = watch('category');
-
-  if (!category) return null;
+  const type = watch('type');
 
   return (
     <VStack as='form' onSubmit={handleSubmit(onSubmit)} spacing={4}>
-      {category === CATEGORIES.REAL_ESTATE && (
+      {type === CATEGORIES.REAL_ESTATE && (
         <>
           <FormControl isInvalid={!!errors.type}>
             <FormLabel>Тип недвижимости</FormLabel>
@@ -89,7 +87,7 @@ const CategoryForm = ({ onSubmit }: CategoryFormProps) => {
         </>
       )}
 
-      {category === CATEGORIES.AUTO && (
+      {type === CATEGORIES.AUTO && (
         <>
           <FormControl isInvalid={!!errors.brand}>
             <FormLabel>Марка</FormLabel>
@@ -143,7 +141,7 @@ const CategoryForm = ({ onSubmit }: CategoryFormProps) => {
         </>
       )}
 
-      {category === CATEGORIES.SERVICES && (
+      {type === CATEGORIES.SERVICES && (
         <>
           <FormControl isInvalid={!!errors.serviceType}>
             <FormLabel>Тип услуги</FormLabel>
