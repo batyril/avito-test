@@ -14,6 +14,7 @@ export const api = createApi({
     }),
     getPostById: builder.query<Post, any>({
       query: (id: string) => `items/${id}`,
+      providesTags: ['post'],
     }),
     deletePost: builder.mutation({
       query: () => ({
@@ -31,8 +32,8 @@ export const api = createApi({
       invalidatesTags: ['post'],
     }),
     updatePost: builder.mutation({
-      query: (newPost) => ({
-        url: 'items',
+      query: ({ newPost, id }) => ({
+        url: `items/${id}`,
         method: 'PUT',
         body: newPost,
       }),
@@ -41,5 +42,9 @@ export const api = createApi({
   }),
 });
 
-export const { useGetPostsQuery, useGetPostByIdQuery, useCreatePostMutation } =
-  api;
+export const {
+  useGetPostsQuery,
+  useGetPostByIdQuery,
+  useCreatePostMutation,
+  useUpdatePostMutation,
+} = api;

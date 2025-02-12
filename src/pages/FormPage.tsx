@@ -7,26 +7,35 @@ import CategoryForm from '../components/CategoryForm';
 import { Heading, useToast } from '@chakra-ui/react';
 
 import { FORM_STEPS } from '../const/formSteps.ts';
-import { useCreatePostMutation } from '../services/api.ts';
+import {
+  useCreatePostMutation,
+  useGetPostByIdQuery,
+  useUpdatePostMutation,
+} from '../services/api.ts';
 import { Post } from '../model/posts.ts';
 import ROUTES from '../const/routes.ts';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const FormPage = () => {
-  const [step, setStep] = useState(FORM_STEPS.BASE);
+  const { id } = useParams();
   const navigate = useNavigate();
-  const toast = useToast();
-  const [addPost, { isError, isSuccess }] = useCreatePostMutation();
-
-  const formMethods = useForm({
-    defaultValues: {
-      name: '',
-      description: '',
-      location: '',
-      type: '',
-      image: '',
-    },
+  const { data: postData } = useGetPostByIdQuery(id, {
+    skip: !id,
   });
+
+  const [addPost, { isError, isSuccess }] = useCreatePostMutation();
+  const [updatePost] = useUpdatePostMutation();
+
+  const [step, setStep] = useState(FORM_STEPS.BASE);
+  const toast = useToast();
+
+  const formMethods = useForm();
+
+  useEffect(() => {
+    if (postData) {
+      formMethods.reset(postData);
+    }
+  }, [postData, formMethods]);
 
   const onNext = () => {
     setStep(FORM_STEPS.CATEGORY);
@@ -37,6 +46,12 @@ const FormPage = () => {
   };
 
   const onSubmit = async (data: Post) => {
+    if (id) {
+      await updatePost({ id, newPost: data });
+      navigate(`/item/${id}`);
+      //TODO: добавить обработку успешного обновления и ошибки
+      return;
+    }
     await addPost(data);
   };
 

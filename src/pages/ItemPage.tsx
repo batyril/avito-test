@@ -48,6 +48,9 @@ const ItemPage = () => {
             <Text>Местоположение: {data.location}</Text>
             <Text>Категория: {data.type}</Text>
             <Image
+              width='100%'
+              height='400px'
+              objectFit='contain'
               borderRadius='lg'
               src={data.image || defaultImage}
               alt={data.name}
@@ -94,7 +97,7 @@ const ItemPage = () => {
           </Box>
         )}
 
-        <Button as={Link} to='/form' colorScheme='teal' size='md'>
+        <Button as={Link} to={`/form/${id}`} colorScheme='teal' size='md'>
           Редактировать
         </Button>
       </Box>

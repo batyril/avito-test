@@ -11,6 +11,7 @@ const AppRouter = () => {
         <Route path={ROUTES.FORM} element={<FormPage />} />
         <Route path={ROUTES.LIST} element={<ListPage />} />
         <Route path={ROUTES.ITEM} element={<ItemPage />} />
+        <Route path={ROUTES.ITEM_EDIT} element={<FormPage />} />
       </Routes>
     </Router>
   );

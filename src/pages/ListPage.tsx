@@ -12,10 +12,13 @@ import {
   Flex,
   Input,
   Select,
+  HStack,
 } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
 import Layout from '../components/Layout';
 import { useGetPostsQuery } from '../services/api.ts';
+import ROUTES from '../const/routes.ts';
+import { AddIcon } from '@chakra-ui/icons';
 
 const ListPage = () => {
   const { data, error, isLoading, isSuccess } = useGetPostsQuery();
@@ -37,9 +40,21 @@ const ListPage = () => {
   return (
     <Layout>
       <Box p={4}>
-        <Heading as='h1' size='xl' mb={6}>
-          Список объявлений
-        </Heading>
+        <HStack justifyContent='space-between'>
+          <Heading as='h1' size='xl' mb={6}>
+            Список объявлений
+          </Heading>
+          <Button
+            as={Link}
+            to={ROUTES.FORM}
+            size='md'
+            mb={6}
+            leftIcon={<AddIcon />}
+            colorScheme='green'
+          >
+            Создать новое объявление
+          </Button>
+        </HStack>
 
         <Flex gap={4} mb={4}>
           <Input
@@ -59,10 +74,6 @@ const ListPage = () => {
             ))}
           </Select>
         </Flex>
-
-        <Button as={Link} to='/form' colorScheme='teal' size='md' mb={6}>
-          Создать новое объявление
-        </Button>
 
         {isLoading && (
           <Box textAlign='center'>
