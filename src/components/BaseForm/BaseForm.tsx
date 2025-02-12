@@ -8,6 +8,7 @@ import {
   FormErrorMessage,
   FormLabel,
 } from '@chakra-ui/react';
+import { ArrowForwardIcon } from '@chakra-ui/icons';
 
 interface BaseFormProps {
   onNext: () => void;
@@ -64,8 +65,14 @@ const BaseForm = ({ onNext }: BaseFormProps) => {
         />
         <FormErrorMessage>{errors.image?.message?.toString()}</FormErrorMessage>
       </FormControl>
-
-      <Button type='submit'>Далее</Button>
+      <Button
+        type='submit'
+        colorScheme='green'
+        rightIcon={<ArrowForwardIcon />}
+      >
+        Далее
+      </Button>
+      ;
     </VStack>
   );
 };

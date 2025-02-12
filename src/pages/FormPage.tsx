@@ -32,6 +32,10 @@ const FormPage = () => {
     setStep(FORM_STEPS.CATEGORY);
   };
 
+  const onBack = () => {
+    setStep(FORM_STEPS.BASE);
+  };
+
   const onSubmit = async (data: Post) => {
     await addPost(data);
   };
@@ -61,7 +65,9 @@ const FormPage = () => {
 
         <FormProvider {...formMethods}>
           {step === FORM_STEPS.BASE && <BaseForm onNext={onNext} />}
-          {step === FORM_STEPS.CATEGORY && <CategoryForm onSubmit={onSubmit} />}
+          {step === FORM_STEPS.CATEGORY && (
+            <CategoryForm onSubmit={onSubmit} onBack={onBack} />
+          )}
         </FormProvider>
       </div>
     </Layout>

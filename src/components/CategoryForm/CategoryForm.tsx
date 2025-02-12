@@ -7,14 +7,17 @@ import {
   FormControl,
   FormErrorMessage,
   FormLabel,
+  HStack,
 } from '@chakra-ui/react';
 import { CATEGORIES } from '../../const/formSteps.ts';
+import { ArrowBackIcon } from '@chakra-ui/icons';
 
 interface CategoryFormProps {
   onSubmit: (data: any) => void;
+  onBack: () => void;
 }
 
-const CategoryForm = ({ onSubmit }: CategoryFormProps) => {
+const CategoryForm = ({ onSubmit, onBack }: CategoryFormProps) => {
   const {
     register,
     handleSubmit,
@@ -22,14 +25,15 @@ const CategoryForm = ({ onSubmit }: CategoryFormProps) => {
     formState: { errors },
   } = useFormContext();
   const type = watch('type');
-
   return (
     <VStack as='form' onSubmit={handleSubmit(onSubmit)} spacing={4}>
       {type === CATEGORIES.REAL_ESTATE && (
         <>
-          <FormControl isInvalid={!!errors.type}>
+          <FormControl isInvalid={!!errors.propertyType}>
             <FormLabel>Тип недвижимости</FormLabel>
-            <Select {...register('type', { required: 'Тип обязателен' })}>
+            <Select
+              {...register('propertyType', { required: 'Тип обязателен' })}
+            >
               <option value='Квартира'>Квартира</option>
               <option value='Дом'>Дом</option>
               <option value='Коттедж'>Коттедж</option>
@@ -37,7 +41,7 @@ const CategoryForm = ({ onSubmit }: CategoryFormProps) => {
               <option value='Комната'>Комната</option>
             </Select>
             <FormErrorMessage>
-              {errors.type?.message?.toString()}
+              {errors.propertyType?.message?.toString()}
             </FormErrorMessage>
           </FormControl>
 
@@ -86,7 +90,6 @@ const CategoryForm = ({ onSubmit }: CategoryFormProps) => {
           </FormControl>
         </>
       )}
-
       {type === CATEGORIES.AUTO && (
         <>
           <FormControl isInvalid={!!errors.brand}>
@@ -131,16 +134,21 @@ const CategoryForm = ({ onSubmit }: CategoryFormProps) => {
             </FormErrorMessage>
           </FormControl>
 
-          <FormControl>
+          <FormControl isInvalid={!!errors.mileage}>
             <FormLabel>Пробег </FormLabel>
             <Input
               type='number'
-              {...register('mileage', { valueAsNumber: true })}
+              {...register('mileage', {
+                required: 'Пробег обязателен',
+                valueAsNumber: true,
+              })}
             />
+            <FormErrorMessage>
+              {errors.mileage?.message?.toString()}
+            </FormErrorMessage>
           </FormControl>
         </>
       )}
-
       {type === CATEGORIES.SERVICES && (
         <>
           <FormControl isInvalid={!!errors.serviceType}>
@@ -196,8 +204,14 @@ const CategoryForm = ({ onSubmit }: CategoryFormProps) => {
           </FormControl>
         </>
       )}
-
-      <Button type='submit'>Отправить</Button>
+      <HStack spacing={4}>
+        <Button onClick={onBack} leftIcon={<ArrowBackIcon />}>
+          Назад
+        </Button>
+        <Button type='submit' colorScheme='blue'>
+          Отправить
+        </Button>
+      </HStack>
     </VStack>
   );
 };
