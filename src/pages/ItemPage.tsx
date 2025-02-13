@@ -11,12 +11,13 @@ import {
 } from '@chakra-ui/react';
 import { useGetPostByIdQuery } from '../services/api.ts';
 import Layout from '../components/Layout';
+import getDefaultImage from '../helper/getDefaultImage.ts';
+import CategoryDetails from '../components/CategoryDetails';
 
 const ItemPage = () => {
   const { id } = useParams();
 
   const { data, error, isLoading, isSuccess } = useGetPostByIdQuery(id);
-  const defaultImage = 'https://cdn1.ozone.ru/s3/multimedia-1-z/6980409107.jpg';
 
   return (
     <Layout>
@@ -52,48 +53,12 @@ const ItemPage = () => {
               height='400px'
               objectFit='contain'
               borderRadius='lg'
-              src={data.image || defaultImage}
+              src={data.image || getDefaultImage()}
               alt={data.name}
               mb={4}
             />
 
-            {(() => {
-              switch (data.type) {
-                case 'Недвижимость':
-                  return (
-                    <Box>
-                      <Text>Тип недвижимости: {data.propertyType}</Text>
-                      <Text>Площадь: {data.area} м²</Text>
-                      <Text>Количество комнат: {data.rooms}</Text>
-                      <Text>Цена: {data.price} ₽</Text>
-                    </Box>
-                  );
-                case 'Авто':
-                  return (
-                    <Box>
-                      <Text>Марка: {data.brand}</Text>
-                      <Text>Модель: {data.model}</Text>
-                      <Text>Год выпуска: {data.year}</Text>
-                      {data.mileage !== undefined && (
-                        <Text>Пробег: {data.mileage} км</Text>
-                      )}
-                    </Box>
-                  );
-                case 'Услуги':
-                  return (
-                    <Box>
-                      <Text>Тип услуги: {data.serviceType}</Text>
-                      <Text>Опыт работы: {data.experience} лет</Text>
-                      <Text>Стоимость: {data.cost} ₽</Text>
-                      {data.workSchedule && (
-                        <Text>График работы: {data.workSchedule}</Text>
-                      )}
-                    </Box>
-                  );
-                default:
-                  return null;
-              }
-            })()}
+            <CategoryDetails data={data} />
           </Box>
         )}
 
@@ -105,5 +70,4 @@ const ItemPage = () => {
   );
 };
 
-//TODO: вынести в отдельную функцию
 export default ItemPage;

@@ -1,5 +1,6 @@
 import { Box, Heading, Text, Image, Flex, Button } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
+import getDefaultImage from '../../helper/getDefaultImage.ts';
 
 interface PostCardProps {
   id: number;
@@ -9,8 +10,6 @@ interface PostCardProps {
   type: string;
   image?: string;
 }
-
-const defaultImage = 'https://cdn1.ozone.ru/s3/multimedia-1-z/6980409107.jpg';
 
 const PostCard = ({
   id,
@@ -27,7 +26,7 @@ const PostCard = ({
         height='200px'
         objectFit='contain'
         borderRadius='lg'
-        src={image || defaultImage}
+        src={image || getDefaultImage()}
         alt={name}
         mb={4}
       />
