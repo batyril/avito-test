@@ -77,7 +77,7 @@ const FormPage = () => {
         <Heading as='h1' size='xl' mb={4}>
           Новое объявление
         </Heading>
-
+        //TODO: сделать через реакт роутер
         <FormProvider {...formMethods}>
           {step === FORM_STEPS.BASE && <BaseForm onNext={onNext} />}
           {step === FORM_STEPS.CATEGORY && (

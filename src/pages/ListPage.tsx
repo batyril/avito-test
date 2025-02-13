@@ -8,7 +8,6 @@ import {
   Spinner,
   Alert,
   AlertIcon,
-  Image,
   Flex,
   Input,
   Select,
@@ -19,16 +18,14 @@ import Layout from '../components/Layout';
 import { useGetPostsQuery } from '../services/api.ts';
 import ROUTES from '../const/routes.ts';
 import { AddIcon } from '@chakra-ui/icons';
+import Pagination from '../Pagination';
+import { usePagination } from '../hooks/useHook.ts';
+import PostCard from '../components/PostCard';
 
 const ListPage = () => {
   const { data, error, isLoading, isSuccess } = useGetPostsQuery();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
-
-  const defaultImage =
-    'https://azaliadecor.ru/upload/iblock/5c7/pya5k5qetqhcd2lm4finiaulj4hjv7pq.jpg';
-
-  const categories = Array.from(new Set(data?.map((item) => item.type) || []));
 
   const filteredPosts =
     data?.filter(
@@ -36,6 +33,14 @@ const ListPage = () => {
         item.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
         (selectedCategory ? item.type === selectedCategory : true),
     ) || [];
+  const postsPerPage = 2;
+
+  const { currentPage, totalPages, currentItems, onChangePage } = usePagination(
+    filteredPosts,
+    postsPerPage,
+  );
+
+  const categories = Array.from(new Set(data?.map((item) => item.type) || []));
 
   return (
     <Layout>
@@ -91,42 +96,17 @@ const ListPage = () => {
 
         {isSuccess && (
           <VStack spacing={4} align='stretch'>
-            {filteredPosts.length > 0 ? (
-              filteredPosts.map((item) => (
-                <Box
+            {currentItems.length > 0 ? (
+              currentItems.map((item) => (
+                <PostCard
                   key={item.id}
-                  p={4}
-                  borderWidth='1px'
-                  borderRadius='lg'
-                  boxShadow='md'
-                >
-                  <Image
-                    width='100%'
-                    height='200px'
-                    objectFit='contain'
-                    borderRadius='lg'
-                    src={item.image || defaultImage}
-                    alt={item.name}
-                    mb={4}
-                  />
-                  <Heading as='h2' size='md' mb={2}>
-                    {item.name}
-                  </Heading>
-                  <Text mb={4}>Описание: {item.description}</Text>
-                  <Text>Местоположение: {item.location}</Text>
-                  <Text>Категория: {item.type}</Text>
-
-                  <Flex justifyContent='flex-end' mt={4}>
-                    <Button
-                      as={Link}
-                      to={`/item/${item.id}`}
-                      colorScheme='blue'
-                      size='lg'
-                    >
-                      Открыть
-                    </Button>
-                  </Flex>
-                </Box>
+                  id={item.id}
+                  name={item.name}
+                  description={item.description}
+                  location={item.location}
+                  type={item.type}
+                  image={item.image}
+                />
               ))
             ) : (
               <Text textAlign='center' fontSize='lg' color='gray.500'>
@@ -136,6 +116,14 @@ const ListPage = () => {
               </Text>
             )}
           </VStack>
+        )}
+
+        {filteredPosts.length > postsPerPage && (
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onChangePage={onChangePage}
+          />
         )}
       </Box>
     </Layout>
