@@ -1,10 +1,10 @@
 import Layout from '../components/Layout';
 import BaseForm from '../components/BaseForm';
-import { useEffect, useState } from 'react';
+import { useEffect, useLayoutEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import CategoryForm from '../components/CategoryForm';
 
-import { Heading, useToast } from '@chakra-ui/react';
+import { Heading, Stack, useToast } from '@chakra-ui/react';
 
 import { FORM_STEPS } from '../const/formSteps.ts';
 import {
@@ -15,6 +15,8 @@ import {
 import { Post } from '../model/posts.ts';
 import ROUTES from '../const/routes.ts';
 import { useNavigate, useParams } from 'react-router-dom';
+import clearDraft from '../helper/clearDraft.ts';
+import { EditIcon } from '@chakra-ui/icons';
 
 const FormPage = () => {
   const { id } = useParams();
@@ -31,7 +33,7 @@ const FormPage = () => {
 
   const formMethods = useForm();
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (postData) {
       formMethods.reset(postData);
     }
@@ -50,9 +52,12 @@ const FormPage = () => {
       await updatePost({ id, newPost: data });
       navigate(`/item/${id}`);
       //TODO: добавить обработку успешного обновления и ошибки
+      clearDraft('Form');
       return;
     }
     await addPost(data);
+
+    clearDraft('Form');
   };
 
   useEffect(() => {
@@ -74,10 +79,13 @@ const FormPage = () => {
   return (
     <Layout>
       <div>
-        <Heading as='h1' size='xl' mb={4}>
-          Новое объявление
-        </Heading>
-        //TODO: сделать через реакт роутер
+        <Stack alignItems={'baseline'} direction={'row'} spacing='24px'>
+          <Heading as='h1' size='xl' mb={4}>
+            {id ? 'Редактирование объявления' : 'Новое объявление'}
+          </Heading>
+          {id && <EditIcon boxSize={6} />}
+        </Stack>
+
         <FormProvider {...formMethods}>
           {step === FORM_STEPS.BASE && <BaseForm onNext={onNext} />}
           {step === FORM_STEPS.CATEGORY && (

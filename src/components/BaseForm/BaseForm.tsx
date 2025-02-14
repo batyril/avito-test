@@ -9,6 +9,7 @@ import {
   FormLabel,
 } from '@chakra-ui/react';
 import { ArrowForwardIcon } from '@chakra-ui/icons';
+import useFormDraft from '../../hooks/useFormDraft.ts';
 
 interface BaseFormProps {
   onNext: () => void;
@@ -20,6 +21,8 @@ const BaseForm = ({ onNext }: BaseFormProps) => {
     handleSubmit,
     formState: { errors },
   } = useFormContext();
+
+  useFormDraft('Form');
 
   return (
     <VStack as='form' onSubmit={handleSubmit(onNext)} spacing={4}>

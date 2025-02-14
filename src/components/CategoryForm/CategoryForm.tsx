@@ -11,6 +11,7 @@ import {
 } from '@chakra-ui/react';
 import { CATEGORIES } from '../../const/formSteps.ts';
 import { ArrowBackIcon } from '@chakra-ui/icons';
+import useFormDraft from '../../hooks/useFormDraft.ts';
 
 interface CategoryFormProps {
   onSubmit: (data: any) => void;
@@ -25,6 +26,9 @@ const CategoryForm = ({ onSubmit, onBack }: CategoryFormProps) => {
     formState: { errors },
   } = useFormContext();
   const type = watch('type');
+
+  useFormDraft('Form');
+
   return (
     <VStack as='form' onSubmit={handleSubmit(onSubmit)} spacing={4}>
       {type === CATEGORIES.REAL_ESTATE && (
