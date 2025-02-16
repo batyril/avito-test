@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import CategoryForm from '../components/CategoryForm';
 
-import { Heading, Stack, useToast } from '@chakra-ui/react';
+import { useToast } from '@chakra-ui/react';
 
 import { FORM_STEPS } from '../const/formSteps.ts';
 import {
@@ -16,7 +16,7 @@ import { Post } from '../model/posts.ts';
 import ROUTES from '../const/routes.ts';
 import { useNavigate, useParams } from 'react-router-dom';
 import clearDraft from '../helper/clearDraft.ts';
-import { EditIcon } from '@chakra-ui/icons';
+import Header from '../components/Header';
 
 const FormPage = () => {
   const { id } = useParams();
@@ -98,15 +98,12 @@ const FormPage = () => {
   }, [isError, isSuccess, navigate, toast]);
 
   return (
-    <Layout>
-      <div>
-        <Stack alignItems={'baseline'} direction={'row'} spacing='24px'>
-          <Heading as='h1' size='xl' mb={4}>
-            {isEditMode ? 'Редактирование объявления' : 'Новое объявление'}
-          </Heading>
-          {isEditMode && <EditIcon boxSize={6} />}
-        </Stack>
-
+    <>
+      <Header
+        text={isEditMode ? 'Редактирование объявления' : 'Новое объявление'}
+        isButtonList
+      />
+      <Layout>
         <FormProvider {...formMethods}>
           {step === FORM_STEPS.BASE && (
             <BaseForm onNext={onNext} isEditMode={isEditMode} />
@@ -119,8 +116,8 @@ const FormPage = () => {
             />
           )}
         </FormProvider>
-      </div>
-    </Layout>
+      </Layout>
+    </>
   );
 };
 

@@ -8,71 +8,98 @@ import {
   Alert,
   AlertIcon,
   Image,
+  Stack,
+  StackDivider,
 } from '@chakra-ui/react';
 import { useGetPostByIdQuery } from '../services/api.ts';
 import Layout from '../components/Layout';
 import getDefaultImage from '../helper/getDefaultImage.ts';
 import CategoryDetails from '../components/CategoryDetails';
 import ROUTES from '../const/routes.ts';
+import Header from '../components/Header';
 
 const ItemPage = () => {
   const { id } = useParams();
-
   const { data, error, isLoading, isSuccess } = useGetPostByIdQuery(id);
 
   return (
-    <Layout>
-      <Box p={4}>
-        <Heading as='h1' size='xl' mb={4}>
-          Просмотр объявления с ID: {id}
-        </Heading>
+    <>
+      <Header text={'объявление'} isButtonCreated isButtonList />
+      <Layout>
+        <Box p={4}>
+          {isLoading && (
+            <Box textAlign='center'>
+              <Spinner size='xl' />
+              <Text mt={2}>Загрузка...</Text>
+            </Box>
+          )}
 
-        {isLoading && (
-          <Box textAlign='center'>
-            <Spinner size='xl' />
-            <Text mt={2}>Загрузка...</Text>
-          </Box>
-        )}
+          {error && (
+            <Alert status='error' mb={4}>
+              <AlertIcon />
+              Произошла ошибка при загрузке данных
+            </Alert>
+          )}
 
-        {error && (
-          <Alert status='error' mb={4}>
-            <AlertIcon />
-            Произошла ошибка при загрузке данных
-          </Alert>
-        )}
+          {isSuccess && data && (
+            <Box mb={8}>
+              <Heading as='h2' size='lg' mb={4}>
+                {data.name}
+              </Heading>
 
-        {isSuccess && data && (
-          <Box mb={6}>
-            <Heading as='h2' size='lg' mb={2}>
-              {data.name}
-            </Heading>
-            <Text>Описание: {data.description}</Text>
-            <Text>Местоположение: {data.location}</Text>
-            <Text>Категория: {data.type}</Text>
-            <Image
-              width='100%'
-              height='400px'
-              objectFit='contain'
-              borderRadius='lg'
-              src={data.image || getDefaultImage()}
-              alt={data.name}
-              mb={4}
-            />
+              <Stack divider={<StackDivider />} spacing={4} mb={6}>
+                <Image
+                  width='100%'
+                  maxWidth='600px'
+                  objectFit='contain'
+                  borderRadius='lg'
+                  src={data.image || getDefaultImage()}
+                  alt={data.name}
+                  mb={6}
+                />
+                <Box>
+                  <Heading size='xs' textTransform='uppercase'>
+                    Описание
+                  </Heading>
+                  <Text pt={2} fontSize='sm'>
+                    {data.description}
+                  </Text>
+                </Box>
 
-            <CategoryDetails data={data} />
-          </Box>
-        )}
+                <Box>
+                  <Heading size='xs' textTransform='uppercase'>
+                    Местоположение
+                  </Heading>
+                  <Text pt={2} fontSize='sm'>
+                    {data.location}
+                  </Text>
+                </Box>
 
-        <Button
-          as={Link}
-          to={id && ROUTES.ITEM_EDIT(id)}
-          colorScheme='teal'
-          size='md'
-        >
-          Редактировать
-        </Button>
-      </Box>
-    </Layout>
+                <Box>
+                  <Heading size='xs' textTransform='uppercase'>
+                    Категория
+                  </Heading>
+                  <Text pt={2} fontSize='sm'>
+                    {data.type}
+                  </Text>
+                </Box>
+              </Stack>
+
+              <CategoryDetails data={data} />
+            </Box>
+          )}
+
+          <Button
+            as={Link}
+            to={id && ROUTES.ITEM_EDIT(id)}
+            colorScheme='green'
+            size='md'
+          >
+            Редактировать
+          </Button>
+        </Box>
+      </Layout>
+    </>
   );
 };
 

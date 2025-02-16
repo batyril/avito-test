@@ -1,4 +1,4 @@
-import { Box, Text } from '@chakra-ui/react';
+import { Box, Text, Heading, Stack, StackDivider } from '@chakra-ui/react';
 import { Post } from '../../model/posts.ts';
 
 interface CategoryDetailsProps {
@@ -47,13 +47,21 @@ const CategoryDetails = ({ data }: CategoryDetailsProps) => {
 
   return (
     <Box mt={4}>
-      {fields.map(({ label, value }) =>
-        value ? (
-          <Text key={label}>
-            {label}: {value}
-          </Text>
-        ) : null,
-      )}
+      <Stack divider={<StackDivider />} spacing={4}>
+        {fields.map(
+          ({ label, value }) =>
+            value && (
+              <Box key={label}>
+                <Heading size='xs' textTransform='uppercase'>
+                  {label}
+                </Heading>
+                <Text pt={2} fontSize='sm'>
+                  {value}
+                </Text>
+              </Box>
+            ),
+        )}
+      </Stack>
     </Box>
   );
 };
