@@ -20,7 +20,7 @@ import Header from '../components/Header';
 
 const ItemPage = () => {
   const { id } = useParams();
-  const { data, error, isLoading, isSuccess } = useGetPostByIdQuery(id);
+  const { data, error, isLoading, isSuccess } = useGetPostByIdQuery(id ?? '');
 
   return (
     <>

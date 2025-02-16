@@ -23,7 +23,7 @@ const FormPage = () => {
   const isEditMode = Boolean(id);
 
   const navigate = useNavigate();
-  const { data: postData } = useGetPostByIdQuery(id, {
+  const { data: postData } = useGetPostByIdQuery(id ?? '', {
     skip: !isEditMode,
   });
 

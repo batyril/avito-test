@@ -4,7 +4,7 @@ import { Post } from '../model/posts.ts';
 export const api = createApi({
   reducerPath: 'api',
   baseQuery: fetchBaseQuery({
-    baseUrl: '/api',
+    baseUrl: 'http://localhost:5173/api',
   }),
   tagTypes: ['post'],
   endpoints: (builder) => ({
@@ -12,13 +12,13 @@ export const api = createApi({
       query: () => 'items',
       providesTags: ['post'],
     }),
-    getPostById: builder.query<Post, any>({
+    getPostById: builder.query<Post, string>({
       query: (id: string) => `items/${id}`,
       providesTags: ['post'],
     }),
     deletePost: builder.mutation({
-      query: () => ({
-        url: 'items',
+      query: (id: string) => ({
+        url: `items/${id}`,
         method: 'DELETE',
       }),
       invalidatesTags: ['post'],
