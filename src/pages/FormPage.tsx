@@ -1,6 +1,6 @@
 import Layout from '../components/Layout';
 import BaseForm from '../components/BaseForm';
-import { useEffect, useLayoutEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import CategoryForm from '../components/CategoryForm';
 
@@ -20,45 +20,65 @@ import { EditIcon } from '@chakra-ui/icons';
 
 const FormPage = () => {
   const { id } = useParams();
+  const isEditMode = Boolean(id);
+
   const navigate = useNavigate();
   const { data: postData } = useGetPostByIdQuery(id, {
-    skip: !id,
+    skip: !isEditMode,
   });
 
   const [addPost, { isError, isSuccess }] = useCreatePostMutation();
-  const [updatePost] = useUpdatePostMutation();
+  const [
+    updatePost,
+    { isError: isUpdateError, isSuccess: isUpdateSuccess, error: updateError },
+  ] = useUpdatePostMutation();
 
   const [step, setStep] = useState(FORM_STEPS.BASE);
   const toast = useToast();
 
-  const formMethods = useForm();
+  const draft = localStorage.getItem('Form');
 
-  useLayoutEffect(() => {
+  const formMethods = useForm<Post>({
+    defaultValues: draft
+      ? undefined
+      : { type: undefined, propertyType: undefined, brand: undefined },
+  });
+
+  useEffect(() => {
     if (postData) {
       formMethods.reset(postData);
     }
   }, [postData, formMethods]);
 
-  const onNext = () => {
-    setStep(FORM_STEPS.CATEGORY);
-  };
-
-  const onBack = () => {
-    setStep(FORM_STEPS.BASE);
-  };
+  const onNext = () => setStep(FORM_STEPS.CATEGORY);
+  const onBack = () => setStep(FORM_STEPS.BASE);
 
   const onSubmit = async (data: Post) => {
-    if (id) {
+    if (isEditMode) {
+      console.info(data, 'data');
       await updatePost({ id, newPost: data });
-      navigate(`/item/${id}`);
-      //TODO: добавить обработку успешного обновления и ошибки
-      clearDraft('Form');
-      return;
+    } else {
+      await addPost(data);
     }
-    await addPost(data);
-
-    clearDraft('Form');
   };
+
+  useEffect(() => {
+    if (isUpdateError) {
+      toast({
+        title: 'Ошибка',
+        description: 'Произошла ошибка при создании объявления',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+        position: 'top-right',
+      });
+    }
+    if (isUpdateSuccess && id) {
+      clearDraft('Form');
+
+      navigate(ROUTES.ITEM(id));
+    }
+  }, [isUpdateError, isUpdateSuccess, updateError, navigate, id, toast]);
 
   useEffect(() => {
     if (isError) {
@@ -72,6 +92,7 @@ const FormPage = () => {
       });
     }
     if (isSuccess) {
+      clearDraft('Form');
       navigate(ROUTES.LIST);
     }
   }, [isError, isSuccess, navigate, toast]);
@@ -81,15 +102,21 @@ const FormPage = () => {
       <div>
         <Stack alignItems={'baseline'} direction={'row'} spacing='24px'>
           <Heading as='h1' size='xl' mb={4}>
-            {id ? 'Редактирование объявления' : 'Новое объявление'}
+            {isEditMode ? 'Редактирование объявления' : 'Новое объявление'}
           </Heading>
-          {id && <EditIcon boxSize={6} />}
+          {isEditMode && <EditIcon boxSize={6} />}
         </Stack>
 
         <FormProvider {...formMethods}>
-          {step === FORM_STEPS.BASE && <BaseForm onNext={onNext} />}
+          {step === FORM_STEPS.BASE && (
+            <BaseForm onNext={onNext} isEditMode={isEditMode} />
+          )}
           {step === FORM_STEPS.CATEGORY && (
-            <CategoryForm onSubmit={onSubmit} onBack={onBack} />
+            <CategoryForm
+              onSubmit={onSubmit}
+              onBack={onBack}
+              isEditMode={isEditMode}
+            />
           )}
         </FormProvider>
       </div>

@@ -13,6 +13,7 @@ import { useGetPostByIdQuery } from '../services/api.ts';
 import Layout from '../components/Layout';
 import getDefaultImage from '../helper/getDefaultImage.ts';
 import CategoryDetails from '../components/CategoryDetails';
+import ROUTES from '../const/routes.ts';
 
 const ItemPage = () => {
   const { id } = useParams();
@@ -62,7 +63,12 @@ const ItemPage = () => {
           </Box>
         )}
 
-        <Button as={Link} to={`/form/${id}`} colorScheme='teal' size='md'>
+        <Button
+          as={Link}
+          to={id && ROUTES.ITEM_EDIT(id)}
+          colorScheme='teal'
+          size='md'
+        >
           Редактировать
         </Button>
       </Box>

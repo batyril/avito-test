@@ -1,43 +1,57 @@
-import { useFormContext } from 'react-hook-form';
 import {
-  VStack,
   Button,
-  Select,
-  Input,
   FormControl,
   FormErrorMessage,
   FormLabel,
   HStack,
+  Input,
+  Select,
+  VStack,
 } from '@chakra-ui/react';
-import { CATEGORIES } from '../../const/formSteps.ts';
 import { ArrowBackIcon } from '@chakra-ui/icons';
+import { CATEGORIES } from '../../const/formSteps.ts';
+import { FieldErrors, useFormContext } from 'react-hook-form';
+import {
+  AutoPost,
+  Post,
+  RealEstatePost,
+  ServicePost,
+} from '../../model/posts.ts';
 import useFormDraft from '../../hooks/useFormDraft.ts';
 
 interface CategoryFormProps {
-  onSubmit: (data: any) => void;
+  onSubmit: (data: Post) => void;
   onBack: () => void;
+  isEditMode: boolean;
 }
 
-const CategoryForm = ({ onSubmit, onBack }: CategoryFormProps) => {
+const CategoryForm = ({ onSubmit, onBack, isEditMode }: CategoryFormProps) => {
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors },
-  } = useFormContext();
+  } = useFormContext<Post>();
+
+  useFormDraft('Form', isEditMode);
+
   const type = watch('type');
 
-  useFormDraft('Form');
+  const realEstateErrors = errors as FieldErrors<RealEstatePost>;
+  const autoErrors = errors as FieldErrors<AutoPost>;
+  const serviceErrors = errors as FieldErrors<ServicePost>;
 
   return (
     <VStack as='form' onSubmit={handleSubmit(onSubmit)} spacing={4}>
       {type === CATEGORIES.REAL_ESTATE && (
         <>
-          <FormControl isInvalid={!!errors.propertyType}>
+          <FormControl isInvalid={!!realEstateErrors.propertyType}>
             <FormLabel>Тип недвижимости</FormLabel>
             <Select
+              defaultValue=''
               {...register('propertyType', { required: 'Тип обязателен' })}
             >
+              <option value='' disabled hidden></option>
               <option value='Квартира'>Квартира</option>
               <option value='Дом'>Дом</option>
               <option value='Коттедж'>Коттедж</option>
@@ -45,11 +59,11 @@ const CategoryForm = ({ onSubmit, onBack }: CategoryFormProps) => {
               <option value='Комната'>Комната</option>
             </Select>
             <FormErrorMessage>
-              {errors.propertyType?.message?.toString()}
+              {realEstateErrors.propertyType?.message?.toString()}
             </FormErrorMessage>
           </FormControl>
 
-          <FormControl isInvalid={!!errors.area}>
+          <FormControl isInvalid={!!realEstateErrors.area}>
             <FormLabel>Площадь</FormLabel>
             <Input
               type='number'
@@ -60,11 +74,11 @@ const CategoryForm = ({ onSubmit, onBack }: CategoryFormProps) => {
               })}
             />
             <FormErrorMessage>
-              {errors.area?.message?.toString()}
+              {realEstateErrors.area?.message?.toString()}
             </FormErrorMessage>
           </FormControl>
 
-          <FormControl isInvalid={!!errors.rooms}>
+          <FormControl isInvalid={!!realEstateErrors.rooms}>
             <FormLabel>Количество комнат</FormLabel>
             <Input
               type='number'
@@ -74,11 +88,11 @@ const CategoryForm = ({ onSubmit, onBack }: CategoryFormProps) => {
               })}
             />
             <FormErrorMessage>
-              {errors.rooms?.message?.toString()}
+              {realEstateErrors.rooms?.message?.toString()}
             </FormErrorMessage>
           </FormControl>
 
-          <FormControl isInvalid={!!errors.price}>
+          <FormControl isInvalid={!!realEstateErrors.price}>
             <FormLabel>Цена</FormLabel>
             <Input
               type='number'
@@ -89,16 +103,21 @@ const CategoryForm = ({ onSubmit, onBack }: CategoryFormProps) => {
               })}
             />
             <FormErrorMessage>
-              {errors.price?.message?.toString()}
+              {realEstateErrors.price?.message?.toString()}
             </FormErrorMessage>
           </FormControl>
         </>
       )}
+
       {type === CATEGORIES.AUTO && (
         <>
-          <FormControl isInvalid={!!errors.brand}>
+          <FormControl isInvalid={!!autoErrors.brand}>
             <FormLabel>Марка</FormLabel>
-            <Select {...register('brand', { required: 'Марка обязательна' })}>
+            <Select
+              defaultValue=''
+              {...register('brand', { required: 'Марка обязательна' })}
+            >
+              <option value='' disabled hidden></option>
               <option value='Toyota'>Toyota</option>
               <option value='BMW'>BMW</option>
               <option value='Mercedes'>Mercedes</option>
@@ -107,19 +126,19 @@ const CategoryForm = ({ onSubmit, onBack }: CategoryFormProps) => {
               <option value='Honda'>Honda</option>
             </Select>
             <FormErrorMessage>
-              {errors.brand?.message?.toString()}
+              {autoErrors.brand?.message?.toString()}
             </FormErrorMessage>
           </FormControl>
 
-          <FormControl isInvalid={!!errors.model}>
+          <FormControl isInvalid={!!autoErrors.model}>
             <FormLabel>Модель</FormLabel>
             <Input {...register('model', { required: 'Модель обязательна' })} />
             <FormErrorMessage>
-              {errors.model?.message?.toString()}
+              {autoErrors.model?.message?.toString()}
             </FormErrorMessage>
           </FormControl>
 
-          <FormControl isInvalid={!!errors.year}>
+          <FormControl isInvalid={!!autoErrors.year}>
             <FormLabel>Год выпуска</FormLabel>
             <Input
               type='number'
@@ -134,11 +153,11 @@ const CategoryForm = ({ onSubmit, onBack }: CategoryFormProps) => {
               })}
             />
             <FormErrorMessage>
-              {errors.year?.message?.toString()}
+              {autoErrors.year?.message?.toString()}
             </FormErrorMessage>
           </FormControl>
 
-          <FormControl isInvalid={!!errors.mileage}>
+          <FormControl isInvalid={!!autoErrors.mileage}>
             <FormLabel>Пробег </FormLabel>
             <Input
               type='number'
@@ -148,20 +167,23 @@ const CategoryForm = ({ onSubmit, onBack }: CategoryFormProps) => {
               })}
             />
             <FormErrorMessage>
-              {errors.mileage?.message?.toString()}
+              {autoErrors.mileage?.message?.toString()}
             </FormErrorMessage>
           </FormControl>
         </>
       )}
+
       {type === CATEGORIES.SERVICES && (
         <>
-          <FormControl isInvalid={!!errors.serviceType}>
+          <FormControl isInvalid={!!serviceErrors.serviceType}>
             <FormLabel>Тип услуги</FormLabel>
             <Select
+              defaultValue=''
               {...register('serviceType', {
                 required: 'Тип услуги обязателен',
               })}
             >
+              <option value='' disabled hidden></option>
               <option value='Ремонт'>Ремонт</option>
               <option value='Уборка'>Уборка</option>
               <option value='Доставка'>Доставка</option>
@@ -169,11 +191,11 @@ const CategoryForm = ({ onSubmit, onBack }: CategoryFormProps) => {
               <option value='Консультации'>Консультации</option>
             </Select>
             <FormErrorMessage>
-              {errors.serviceType?.message?.toString()}
+              {serviceErrors.serviceType?.message?.toString()}
             </FormErrorMessage>
           </FormControl>
 
-          <FormControl isInvalid={!!errors.experience}>
+          <FormControl isInvalid={!!serviceErrors.experience}>
             <FormLabel>Опыт работы</FormLabel>
             <Input
               type='number'
@@ -183,11 +205,11 @@ const CategoryForm = ({ onSubmit, onBack }: CategoryFormProps) => {
               })}
             />
             <FormErrorMessage>
-              {errors.experience?.message?.toString()}
+              {serviceErrors.experience?.message?.toString()}
             </FormErrorMessage>
           </FormControl>
 
-          <FormControl isInvalid={!!errors.cost}>
+          <FormControl isInvalid={!!serviceErrors.cost}>
             <FormLabel>Стоимость</FormLabel>
             <Input
               placeholder='₽'
@@ -198,16 +220,17 @@ const CategoryForm = ({ onSubmit, onBack }: CategoryFormProps) => {
               })}
             />
             <FormErrorMessage>
-              {errors.cost?.message?.toString()}
+              {serviceErrors.cost?.message?.toString()}
             </FormErrorMessage>
           </FormControl>
 
           <FormControl>
             <FormLabel>График работы</FormLabel>
-            <Input {...register('schedule')} />
+            <Input {...register('workSchedule')} />
           </FormControl>
         </>
       )}
+
       <HStack spacing={4}>
         <Button onClick={onBack} leftIcon={<ArrowBackIcon />}>
           Назад

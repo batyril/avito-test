@@ -7,7 +7,7 @@ interface BasePost {
   image?: string;
 }
 
-interface RealEstatePost extends BasePost {
+export interface RealEstatePost extends BasePost {
   type: 'Недвижимость';
   propertyType: string;
   area: number;
@@ -15,7 +15,7 @@ interface RealEstatePost extends BasePost {
   price: number;
 }
 
-interface AutoPost extends BasePost {
+export interface AutoPost extends BasePost {
   type: 'Авто';
   brand: string;
   model: string;
@@ -23,7 +23,7 @@ interface AutoPost extends BasePost {
   mileage?: number;
 }
 
-interface ServicePost extends BasePost {
+export interface ServicePost extends BasePost {
   type: 'Услуги';
   serviceType: string;
   experience: number;

@@ -10,19 +10,21 @@ import {
 } from '@chakra-ui/react';
 import { ArrowForwardIcon } from '@chakra-ui/icons';
 import useFormDraft from '../../hooks/useFormDraft.ts';
+import { Post } from '../../model/posts.ts';
 
 interface BaseFormProps {
   onNext: () => void;
+  isEditMode: boolean;
 }
 
-const BaseForm = ({ onNext }: BaseFormProps) => {
+const BaseForm = ({ onNext, isEditMode }: BaseFormProps) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useFormContext();
+  } = useFormContext<Post>();
 
-  useFormDraft('Form');
+  useFormDraft('Form', isEditMode);
 
   return (
     <VStack as='form' onSubmit={handleSubmit(onNext)} spacing={4}>
@@ -49,7 +51,11 @@ const BaseForm = ({ onNext }: BaseFormProps) => {
       </FormControl>
       <FormControl isInvalid={!!errors.type}>
         <FormLabel htmlFor='location'> Выберите категорию</FormLabel>
-        <Select {...register('type', { required: 'Выберите категорию' })}>
+        <Select
+          defaultValue=''
+          {...register('type', { required: 'Категория обязательна' })}
+        >
+          <option value='' disabled hidden></option>
           <option value='Недвижимость'>Недвижимость</option>
           <option value='Авто'>Авто</option>
           <option value='Услуги'>Услуги</option>
@@ -75,7 +81,6 @@ const BaseForm = ({ onNext }: BaseFormProps) => {
       >
         Далее
       </Button>
-      ;
     </VStack>
   );
 };

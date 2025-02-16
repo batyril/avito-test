@@ -1,8 +1,8 @@
 export const ROUTES = {
   FORM: '/form',
   LIST: '/list',
-  ITEM: '/item/:id',
-  ITEM_EDIT: '/form/:id',
+  ITEM: (id: string | number) => `/item/${id}`,
+  ITEM_EDIT: (id: string | number) => `/form/${id}`,
   NOT_FOUND: '*',
 };
 

@@ -1,6 +1,7 @@
 import { Box, Heading, Text, Image, Flex, Button } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
 import getDefaultImage from '../../helper/getDefaultImage.ts';
+import ROUTES from '../../const/routes.ts';
 
 interface PostCardProps {
   id: number;
@@ -37,7 +38,7 @@ const PostCard = ({
       <Text>Местоположение: {location}</Text>
       <Text>Категория: {type}</Text>
       <Flex justifyContent='flex-end' mt={4}>
-        <Button as={Link} to={`/item/${id}`} colorScheme='blue' size='lg'>
+        <Button as={Link} to={ROUTES.ITEM(id)} colorScheme='blue' size='lg'>
           Открыть
         </Button>
       </Flex>

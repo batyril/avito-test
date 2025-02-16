@@ -16,8 +16,8 @@ const AppRouter = () => {
         <Route path='/' element={<Navigate to={ROUTES.LIST} replace />} />
         <Route path={ROUTES.FORM} element={<FormPage />} />
         <Route path={ROUTES.LIST} element={<ListPage />} />
-        <Route path={ROUTES.ITEM} element={<ItemPage />} />
-        <Route path={ROUTES.ITEM_EDIT} element={<FormPage />} />
+        <Route path={ROUTES.ITEM(':id')} element={<ItemPage />} />
+        <Route path={ROUTES.ITEM_EDIT(':id')} element={<FormPage />} />
         <Route path={ROUTES.NOT_FOUND} element={<NotFound />} />
       </Routes>
     </Router>

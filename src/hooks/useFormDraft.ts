@@ -1,11 +1,13 @@
 import { useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
 
-const useFormDraft = (storageKey: 'Form') => {
+const useFormDraft = (storageKey: 'Form', isEditMode: boolean) => {
   const { watch, setValue } = useFormContext();
   const formData = watch();
 
   useEffect(() => {
+    if (isEditMode) return;
+
     const draftData = localStorage.getItem(storageKey);
     if (draftData) {
       const parsedData = JSON.parse(draftData);
@@ -13,13 +15,15 @@ const useFormDraft = (storageKey: 'Form') => {
         setValue(key, parsedData[key]);
       });
     }
-  }, [setValue, storageKey]);
+  }, [setValue, storageKey, isEditMode]);
 
   useEffect(() => {
+    if (isEditMode) return;
+
     if (Object.keys(formData).length > 0) {
       localStorage.setItem(storageKey, JSON.stringify(formData));
     }
-  }, [formData, storageKey]);
+  }, [formData, storageKey, isEditMode]);
 
   return;
 };
