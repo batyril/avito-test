@@ -8,7 +8,7 @@ import Filters from '../components/Filters';
 import PostList from '../components/PostList';
 import Header from '../components/Header';
 
-const postsPerPage = 2;
+const postsPerPage = 5;
 
 const ListPage = () => {
   const { data, error, isLoading, isSuccess } = useGetPostsQuery();

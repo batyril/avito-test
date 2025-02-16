@@ -27,7 +27,7 @@ const Filters = ({
         onChange={(e) => setSearchTerm(e.target.value)}
       />
       <Select
-        placeholder='Выберите категорию'
+        placeholder='все категории'
         value={selectedCategory}
         onChange={(e) => setSelectedCategory(e.target.value)}
       >

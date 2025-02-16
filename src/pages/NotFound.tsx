@@ -1,15 +1,25 @@
-import { Button, Box, Heading, Text } from '@chakra-ui/react';
+import { Button, Box, Text } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
 import Layout from '../components/Layout';
 import ROUTES from '../const/routes.ts';
-//TODO: добавить анимацию
+import { Player } from '@lottiefiles/react-lottie-player';
+import animate from '../assets/notFound.json';
+
 const NotFoundPage = () => {
   return (
     <Layout>
       <Box textAlign='center' p={10}>
-        <Heading as='h1' size='2xl' mb={4}>
-          404
-        </Heading>
+        <Player
+          autoplay
+          loop
+          src={animate}
+          style={{
+            height: '100%',
+            width: '100%',
+            maxHeight: '450px',
+            maxWidth: '450px',
+          }}
+        />
         <Text fontSize='xl' mb={6}>
           Страница не найдена
         </Text>

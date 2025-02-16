@@ -12,7 +12,6 @@ test('переход на случайный адрес отображает с�
     </MemoryRouter>,
   );
 
-  expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('404');
   expect(screen.getByText('Страница не найдена')).toBeInTheDocument();
   expect(screen.getByText('Перейти к списку объявлений')).toBeInTheDocument();
 });

@@ -14,5 +14,8 @@ module.exports = {
   },
   testEnvironment: 'jest-fixed-jsdom',
   testPathIgnorePatterns: ['/node_modules/', '<rootDir>/e2e'],
-  setupFilesAfterEnv: ['<rootDir>/jest-preset/jest.setup.js'],
+  setupFilesAfterEnv: [
+    '<rootDir>/jest-preset/jest.setup.js',
+    '<rootDir>/jest-preset/lottiefiles-mock.tsx',
+  ],
 };
